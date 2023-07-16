@@ -1,7 +1,8 @@
 package com.techacademy.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Data;
@@ -18,6 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "employee")
+@Where(clause = "delete_flag = 0")
 public class Employee {
 
     /** 主キー。自動生成 */
@@ -31,24 +34,24 @@ public class Employee {
 
     /** 削除フラグ */
     @Column(nullable = false)
-    private Integer delete_flag;
+    private Integer deleteFlag;
 
     /** 登録日時 */
     @Column(nullable = false)
-    private Date created_at;
+    private LocalDateTime createdAt;
 
     /** 更新日時 */
     @Column(nullable = false)
-    private Date updated_at;
+    private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "employee")
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
     private Authentication authentication;
 
 
     @PreRemove
     @Transactional
     private void preRemove() {
-        // 認証エンティティからuserを切り離す
+
         if (authentication!=null) {
             authentication.setEmployee(null);
         }
