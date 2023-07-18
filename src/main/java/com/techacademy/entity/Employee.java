@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,18 +32,22 @@ public class Employee {
 
     /** 氏名 */
     @Column(length = 20, nullable = false)
+    @NotEmpty
     private String name;
 
     /** 削除フラグ */
     @Column(nullable = false)
+    @NotNull
     private Integer deleteFlag;
 
     /** 登録日時 */
     @Column(nullable = false)
+    @NotNull
     private LocalDateTime createdAt;
 
     /** 更新日時 */
     @Column(nullable = false)
+    @NotNull
     private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)

@@ -9,14 +9,14 @@
     <h1 th:text="'ID:' + ${employee.id} + 'の従業員情報　編集ページ'"></h1>
         <p>(パスワードは変更する場合のみ入力してください。)</p>
     <form method="post" th:action="@{/employee/edit/{aid}(aid=${employee.id})}" th:object="${employee}">
-    <label for="code">社員番号</label><br>
+        <label for="code">社員番号</label><br>
         <input type="hidden" th:field="*{authentication.code}" th:text="*{authentication.code}">
         <br>
         <label for="name">氏名</label><br>
         <input type="text" th:field="*{name}">
         <br>
         <label for="password">パスワード</label><br>
-        <input type="text" th:field="*{authentication.password}">
+        <input type="text" id="authentication.password" name="authentication.password">
         <br>
         <label for="role">権限</label><br>
         <select th:field="*{authentication.role}">

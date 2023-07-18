@@ -2,6 +2,8 @@ package com.techacademy.controller;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,8 @@ import com.techacademy.service.EmployeeService;
 @RequestMapping("employee")
 public class EmployeeController {
     private final EmployeeService service;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public EmployeeController(EmployeeService service) {
         this.service = service;
@@ -51,6 +55,8 @@ public class EmployeeController {
         // 登録
         Authentication authentication = employee.getAuthentication();
         authentication.setEmployee(employee);
+        String password = employee.getAuthentication().getPassword();
+        authentication.setPassword(passwordEncoder.encode(password));
         employee.setAuthentication(authentication);
         employee.setUpdatedAt(LocalDateTime.now());
         employee.setDeleteFlag(0);
@@ -66,10 +72,16 @@ public class EmployeeController {
 
         return "employee/edit";
     }
+
     @PostMapping("/edit/{id}")
     public String postEdit(@PathVariable("id") Integer id, Employee employee) {
         Authentication authentication = employee.getAuthentication();
         authentication.setEmployee(employee);
+        String password =employee.getAuthentication().getPassword();
+        if (password.equals("")) {
+            password = service.getEmployee(id).getAuthentication().getPassword();
+        }
+        authentication.setPassword(passwordEncoder.encode(password));
         employee.setAuthentication(authentication);
         employee.setId(id);
         employee.setUpdatedAt(LocalDateTime.now());
@@ -78,6 +90,7 @@ public class EmployeeController {
         service.saveEmployee(employee);
         return "redirect:/employee/list";
     }
+
     @GetMapping("/delete/{id}")
     public String deleteEdit(@PathVariable("id") Integer id) {
         Employee employee = service.getEmployee(id);
