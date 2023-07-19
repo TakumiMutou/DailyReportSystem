@@ -75,18 +75,21 @@ public class EmployeeController {
 
     @PostMapping("/edit/{id}")
     public String postEdit(@PathVariable("id") Integer id, Employee employee) {
+        Employee tempEmployee = service.getEmployee(id);
         Authentication authentication = employee.getAuthentication();
         authentication.setEmployee(employee);
-        String password =employee.getAuthentication().getPassword();
-        if (password.equals("")) {
-            password = service.getEmployee(id).getAuthentication().getPassword();
+
+        String password = employee.getAuthentication().getPassword();//edit.htmlで入力されたパスワード
+        if (password.equals("") ) {
+            authentication.setPassword(tempEmployee.getAuthentication().getPassword());
+        }else {
+            authentication.setPassword(passwordEncoder.encode(password));
         }
-        authentication.setPassword(passwordEncoder.encode(password));
         employee.setAuthentication(authentication);
         employee.setId(id);
         employee.setUpdatedAt(LocalDateTime.now());
         employee.setDeleteFlag(0);
-        employee.setCreatedAt(service.getEmployee(id).getCreatedAt());
+        employee.setCreatedAt(tempEmployee.getCreatedAt());
         service.saveEmployee(employee);
         return "redirect:/employee/list";
     }
