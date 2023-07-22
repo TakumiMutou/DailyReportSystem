@@ -1,0 +1,15 @@
+@charset "UTF-8";
+table {
+    border-collapse: collapse;
+}
+
+th {
+    border: solid 1px black;
+    padding: 10px 20px;
+}
+td {
+    border: solid 1px black;
+}
+pre {
+    font-family: "Hiragino Kaku Gothic Pro",Meiryo,"MS PGothic",Helvetica,Arial,sans-serif;
+}
