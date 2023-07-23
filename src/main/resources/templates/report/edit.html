@@ -12,7 +12,7 @@
             <input type="date" th:field="*{reportDate}" required>
             <br>
             <label for="name">氏名</label><br>
-            <input type="text" th:field="*{employee.name}">
+            <input type="hidden" th:field="*{employee.name}" th:text="*{employee.name}">
             <br>
             <label for="title">タイトル</label><br>
             <input type="text" th:field="*{title}">
@@ -21,7 +21,7 @@
             <textarea rows="4" cols="50" th:field="*{content}"></textarea><br>
             <input type="submit" value="投稿">
         </form>
-        <a th:href="@{/employee/list}">一覧に戻る</a>
+        <a th:href="@{/report/list}">一覧に戻る</a>
 
 </body>
 </html>
